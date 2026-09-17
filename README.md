@@ -1,11 +1,12 @@
 # bailian-image-proxy
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![CI](https://github.com/lpdswing/bailian-image-proxy/actions/workflows/ci.yml/badge.svg)](https://github.com/lpdswing/bailian-image-proxy/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB)
 ![Docker](https://img.shields.io/badge/Docker-ready-2496ED)
 
 把**阿里云百炼（DashScope / Model Studio）的文生图模型**封装成 **OpenAI SDK 兼容**的
-`POST /v1/images/generations`，让任何支持 OpenAI 格式的代码或工具（LangChain、Presenton、
+`POST /v1/images/generations`，让任何支持 OpenAI 格式的代码或工具（LangChain、n8n、
 各类 AI 应用）无需改造就能直接用上百炼的生图能力。
 
 ## 特性
@@ -21,6 +22,20 @@
 - **单容器部署**：FastAPI + uvicorn，镜像约 60MB
 
 ## 快速开始
+
+### 方式 1：用预构建镜像（不用克隆）
+
+```bash
+docker run -d --name bailian-image-proxy -p 8000:8000 \
+  -e DASHSCOPE_API_KEY=sk-你的百炼Key \
+  -e SERVER_API_KEY=自己设一个访问密钥 \
+  ghcr.io/lpdswing/bailian-image-proxy:latest
+```
+
+镜像标签：`latest`（最新正式版）、`edge`（main 分支最新）、`v1.2.3` / `1.2`（版本号）、
+`sha-xxxxxxx`（对应提交）。支持 `linux/amd64` 与 `linux/arm64`。
+
+### 方式 2：从源码构建
 
 ```bash
 git clone https://github.com/lpdswing/bailian-image-proxy.git
@@ -172,21 +187,7 @@ docker network connect bailian-image-proxy_default <你的容器名>
 
 **API Key** 填 `SERVER_API_KEY` 的值（本服务的访问密钥，不是百炼 Key）。
 
-<details>
-<summary>以 Presenton 为例</summary>
-
-在 Presenton 的「Settings → 图片生成 → OpenAI Compatible」里填：
-
-| 配置项 | 值 |
-|---|---|
-| Base URL | `http://172.18.0.1:8000/v1`（或方式 2/3 的地址） |
-| API Key | 你的 `SERVER_API_KEY` |
-| Model | `qwen-image-2.0` |
-
-对应环境变量：`OPENAI_COMPAT_IMAGE_BASE_URL` / `OPENAI_COMPAT_IMAGE_API_KEY` /
-`OPENAI_COMPAT_IMAGE_MODEL`。注意 Presenton 从**运行时环境变量**读取配置，
-UI 里改完若未生效需 `docker restart presenton-production-1`。
-</details>
+**Model** 填 `GET /v1/models` 返回的任意模型名，例如 `qwen-image-2.0`。
 
 ## 排查
 

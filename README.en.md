@@ -1,6 +1,7 @@
 # bailian-image-proxy
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![CI](https://github.com/lpdswing/bailian-image-proxy/actions/workflows/ci.yml/badge.svg)](https://github.com/lpdswing/bailian-image-proxy/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB)
 ![Docker](https://img.shields.io/badge/Docker-ready-2496ED)
 
@@ -8,7 +9,7 @@
 
 An **OpenAI-compatible** `POST /v1/images/generations` proxy for **Alibaba Cloud Bailian
 (DashScope / Model Studio)** text-to-image models. Point any OpenAI-format client
-(LangChain, Presenton, your own app) at this service and use Bailian's image models
+(LangChain, n8n, your own app) at this service and use Bailian's image models
 without touching your code.
 
 ## Features
@@ -32,6 +33,20 @@ without touching your code.
 - **Single container** — FastAPI + uvicorn, ~60 MB image
 
 ## Quick start
+
+### Option 1: prebuilt image
+
+```bash
+docker run -d --name bailian-image-proxy -p 8000:8000 \
+  -e DASHSCOPE_API_KEY=sk-your-bailian-key \
+  -e SERVER_API_KEY=pick-an-access-key \
+  ghcr.io/lpdswing/bailian-image-proxy:latest
+```
+
+Tags: `latest` (latest release), `edge` (latest main), `v1.2.3` / `1.2` (versions),
+`sha-xxxxxxx` (commit). Built for `linux/amd64` and `linux/arm64`.
+
+### Option 2: build from source
 
 ```bash
 git clone https://github.com/lpdswing/bailian-image-proxy.git
