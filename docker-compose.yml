@@ -1,0 +1,18 @@
+services:
+  bailian-image-proxy:
+    build: .
+    container_name: bailian-image-proxy
+    ports:
+      - "8000:8000"
+    environment:
+      DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY:-}
+      SERVER_API_KEY: ${SERVER_API_KEY:-}
+      DASHSCOPE_BASE_URL: ${DASHSCOPE_BASE_URL:-https://dashscope.aliyuncs.com}
+      IMAGE_MODELS: ${IMAGE_MODELS:-}
+      PREFER_ASYNC: ${PREFER_ASYNC:-false}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8000/health',timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

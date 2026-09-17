@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Import app (syntax + schema check)
+        run: python -c "from app.main import app; print('app loaded:', app.title)"
+
+      - name: Build Docker image
+        run: docker build -t bailian-image-proxy:ci .
+
+      - name: Smoke test (health endpoint)
+        run: |
+          docker run -d --name bip -p 8000:8000 \
+            -e DASHSCOPE_API_KEY=dummy-for-smoke-test \
+            bailian-image-proxy:ci
+          for i in $(seq 1 20); do
+            if curl -sf http://localhost:8000/health; then
+              echo "health check passed"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "health check failed"
+          docker logs bip
+          exit 1
