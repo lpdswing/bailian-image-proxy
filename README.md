@@ -32,7 +32,7 @@ docker run -d --name bailian-image-proxy -p 8000:8000 \
   ghcr.io/lpdswing/bailian-image-proxy:latest
 ```
 
-镜像标签：`latest`（最新正式版）、`edge`（main 分支最新）、`v1.2.3` / `1.2`（版本号）、
+镜像标签：`latest`（最新正式版）、`1.0.0` / `1.0`（版本号）、`edge`（main 分支最新）、
 `sha-xxxxxxx`（对应提交）。支持 `linux/amd64` 与 `linux/arm64`。
 
 ### 方式 2：从源码构建

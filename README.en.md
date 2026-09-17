@@ -43,7 +43,7 @@ docker run -d --name bailian-image-proxy -p 8000:8000 \
   ghcr.io/lpdswing/bailian-image-proxy:latest
 ```
 
-Tags: `latest` (latest release), `edge` (latest main), `v1.2.3` / `1.2` (versions),
+Tags: `latest` (latest release), `1.0.0` / `1.0` (versions), `edge` (latest main),
 `sha-xxxxxxx` (commit). Built for `linux/amd64` and `linux/arm64`.
 
 ### Option 2: build from source
